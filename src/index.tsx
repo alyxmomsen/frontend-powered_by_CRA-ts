@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
@@ -12,9 +12,13 @@ window.requestAnimationFrame(foo)
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
+export const maincontext = createContext<{ app: MyBusinessApp }>({ app })
+
 root.render(
     <React.StrictMode>
-        <App />
+        <maincontext.Provider value={{ app }}>
+            <App />
+        </maincontext.Provider>
     </React.StrictMode>
 )
 

@@ -14,21 +14,21 @@ export default class App {
     private requestStatus: EnumRequestStatus
 
     private async sendRequest() {
-        const contentType = 'application/json' ;
+        const contentType = 'application/json'
 
-        const baseUrl = 'http://127.0.0.1:3030' ;
+        const baseUrl = 'http://127.0.0.1:3030'
 
-        const endPoint = '/api/main';
+        const endPoint = '/api/forntend/main'
 
         try {
-            this.requestStatus = EnumRequestStatus.inProcess;
+            this.requestStatus = EnumRequestStatus.inProcess
 
             const response = await fetch(baseUrl + endPoint, {
                 method: 'post',
                 headers: {
                     'content-type': contentType,
                 },
-                body: JSON.stringify({foo:'bar'}),
+                body: JSON.stringify({ foo: 'bar' }),
             })
 
             const data = (await response.json()) as TResponseData<{
@@ -38,12 +38,11 @@ export default class App {
             const { payload } = data
 
             console.log({ payload })
-            
         } catch (error) {
             console.log({ error })
         }
 
-        this.requestStatus=EnumRequestStatus.returned;
+        this.requestStatus = EnumRequestStatus.returned
     }
 
     update() {
@@ -51,7 +50,7 @@ export default class App {
             this.requestStatus === EnumRequestStatus.idle ||
             this.requestStatus === EnumRequestStatus.returned
         ) {
-            this.sendRequest();
+            this.sendRequest()
         }
     }
 
