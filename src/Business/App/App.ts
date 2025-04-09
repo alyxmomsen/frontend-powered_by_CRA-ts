@@ -18,7 +18,7 @@ export default class App {
 
         const baseUrl = 'http://127.0.0.1:3030'
 
-        const endPoint = '/api/forntend/main'
+        const endPoint = '/api/hook'
 
         try {
             this.requestStatus = EnumRequestStatus.inProcess
