@@ -1,22 +1,19 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { UseMyContext } from '../hooks/UseMyContext'
 
 const MyComponent = () => {
-    const [state, setState] = useState<number>(0)
+    const { app } = UseMyContext()
 
     return (
         <div>
-            <h1>this is my component</h1>
-            <h2>My State</h2>
-            <div>state: {state}</div>
-            <div>
-                <button
-                    onClick={() => {
-                        setState((value) => value + 1)
-                    }}
-                >
-                    change the state
-                </button>
-            </div>
+            <div>{}</div>
+            <button
+                onClick={() => {
+                    app.do()
+                }}
+            >
+                click
+            </button>
         </div>
     )
 }

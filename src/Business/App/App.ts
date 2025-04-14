@@ -8,10 +8,14 @@ export enum EnumRequestStatus {
     returned,
 }
 
-export default class App {
+export default class MyBusinessLogicApp {
     private data: number
 
     private requestStatus: EnumRequestStatus
+
+    public do() {
+        alert()
+    }
 
     private async sendRequest() {
         const contentType = 'application/json'
@@ -28,7 +32,7 @@ export default class App {
                 headers: {
                     'content-type': contentType,
                 },
-                body: JSON.stringify({ foo: 'bar' }),
+                body: JSON.stringify({ clientId: 777 }),
             })
 
             const data = (await response.json()) as TResponseData<{
@@ -37,7 +41,7 @@ export default class App {
 
             const { payload } = data
 
-            console.log({ payload })
+            console.log({ payload, data })
         } catch (error) {
             console.log({ error })
         }
