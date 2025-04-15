@@ -14,15 +14,15 @@ export function MyBusinessLogicContext({
 }) {
     const [app, setApp] = useState(new MyBusinessLogicApp())
 
-    const loop = () => {
-        console.log('lllllooooppp')
-
-        app.update()
-
-        window.requestAnimationFrame(loop)
-    }
-
     useEffect(() => {
+        const loop = () => {
+            console.log('lllllooooppp')
+
+            app.update()
+
+            window.requestAnimationFrame(loop)
+        }
+
         loop()
     }, [])
 

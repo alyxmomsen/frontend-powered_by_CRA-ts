@@ -10,7 +10,7 @@ const MyComponent = () => {
             <button
                 onClick={() => {
                     app.addTransactionAction({
-                        foo:"fucking bar",
+                        foo: 'fucking bar',
                     })
                 }}
             >
