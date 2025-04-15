@@ -9,7 +9,9 @@ const MyComponent = () => {
             <div>{}</div>
             <button
                 onClick={() => {
-                    app.do()
+                    app.addTransactionAction({
+                        foo:"fucking bar",
+                    })
                 }}
             >
                 click
