@@ -1,11 +1,10 @@
 import { UseMyContext } from '../hooks/UseMyContext'
-import { UseInterfaceContext } from '../Business/context/RendeContext'
+// import { UseInterfaceContext } from '../Business/context/RendeContext'
 import { EnumRequestStatus } from '../Business/App/App'
-import { useEffect } from 'react'
 
-const MyComponent = () => {
-    const { app } = UseMyContext()
-    const { longpollingState } = UseInterfaceContext()
+const MyDemoComponent = () => {
+    const { app , longpollingState } = UseMyContext()
+    // const { longpollingState } = UseInterfaceContext()
 
     return (
         <div>
@@ -21,16 +20,32 @@ const MyComponent = () => {
                 send action
             </button>
             <div>
-                {longpollingState === EnumRequestStatus.idle
-                    ? 'idle'
-                    : longpollingState === EnumRequestStatus.inProcess
-                      ? 'in process'
-                      : longpollingState === EnumRequestStatus.returned
-                        ? 'returned'
-                        : 'other'}
+                <div>
+                    {longpollingState === EnumRequestStatus.idle
+                        ? 'idle'
+                        : longpollingState === EnumRequestStatus.inProcess
+                          ? 'in process'
+                          : longpollingState === EnumRequestStatus.returned
+                            ? 'returned'
+                            : 'other'}
+                </div>
+                <button
+                    onClick={() => {
+                        app.startLongpooling()
+                    }}
+                >
+                    start
+                </button>
+                <button
+                    onClick={() => {
+                        app.stopLongpooling()
+                    }}
+                >
+                    stop
+                </button>
             </div>
         </div>
     )
 }
 
-export default MyComponent
+export default MyDemoComponent

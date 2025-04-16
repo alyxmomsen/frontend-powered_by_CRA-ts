@@ -1,20 +1,32 @@
 import { createContext, useEffect, useState } from 'react'
-import MyBusinessLogicApp from '../App/App'
+import MyBusinessLogicApp, { EnumRequestStatus } from '../App/App'
 
-export interface IMyContext {
-    app: MyBusinessLogicApp
+export type TInerfaceGlobalState = {
+    longpollingState: EnumRequestStatus
 }
 
-export const MyContext = createContext<IMyContext | undefined>(undefined)
+export type TMyContext = {
+    app: MyBusinessLogicApp
+} & TInerfaceGlobalState
+
+export const MyContext = createContext<TMyContext | undefined>(undefined)
 
 export function MyBusinessLogicContext({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const [app, setApp] = useState(new MyBusinessLogicApp())
+    const [app] = useState(new MyBusinessLogicApp())
+    const [state, setState] = useState<TInerfaceGlobalState>({
+        longpollingState: EnumRequestStatus.idle,
+    })
 
     useEffect(() => {
+
+        app.onStatusChanged((status:EnumRequestStatus) => setState({
+            longpollingState:status
+        }))
+
         const loop = () => {
             console.log('lllllooooppp')
 
@@ -26,5 +38,11 @@ export function MyBusinessLogicContext({
         loop()
     }, [])
 
-    return <MyContext.Provider value={{ app }}>{children}</MyContext.Provider>
+    return (
+        <MyContext.Provider
+            value={{ app, longpollingState: state.longpollingState }}
+        >
+            {children}
+        </MyContext.Provider>
+    )
 }

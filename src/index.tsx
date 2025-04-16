@@ -4,16 +4,16 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { MyBusinessLogicContext } from './Business/context/MyBusinessLogicContext'
-import { InerfaceContextComponent } from './Business/context/RendeContext'
+// import { InerfaceContextComponent } from './Business/context/RendeContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
     <React.StrictMode>
         <MyBusinessLogicContext>
-            <InerfaceContextComponent>
-                <App />
-            </InerfaceContextComponent>
+            <App />
+            {/* <InerfaceContextComponent>
+            </InerfaceContextComponent> */}
         </MyBusinessLogicContext>
     </React.StrictMode>
 )

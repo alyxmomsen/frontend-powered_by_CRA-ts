@@ -2,10 +2,16 @@ export type TResponseData<T> = {
     payload: T
 }
 
+export enum EnumLongpoolingSwitchState {
+    on,
+    off,
+}
+
 export enum EnumRequestStatus {
     idle,
     inProcess,
     returned,
+    error,
 }
 
 export type TRequestData<T> = {
@@ -16,7 +22,9 @@ export type TRequestData<T> = {
 export default class MyBusinessLogicApp {
     private data: number
     private baseUrl: string
+
     private requestStatus: EnumRequestStatus
+    private longpoolingSwitchState: EnumLongpoolingSwitchState
 
     //  test  method
     public do() {
@@ -33,7 +41,6 @@ export default class MyBusinessLogicApp {
     public async addTransactionAction(data: any) {
         console.log('action')
         const contentType = 'application/json'
-
         const endPoint = '/api/f/fb'
 
         try {
@@ -92,6 +99,8 @@ export default class MyBusinessLogicApp {
             console.log({ payload, data })
         } catch (error) {
             console.log({ error })
+            this.requestStatus = EnumRequestStatus.error
+            this.onStatusChangedCallBack(this.requestStatus)
         }
 
         this.requestStatus = EnumRequestStatus.returned
@@ -99,19 +108,36 @@ export default class MyBusinessLogicApp {
         this.onStatusChangedCallBack(this.requestStatus)
     }
 
+    public startLongpooling() {
+        this.longpoolingSwitchState = EnumLongpoolingSwitchState.on
+    }
+
+    public stopLongpooling() {
+        this.longpoolingSwitchState = EnumLongpoolingSwitchState.off
+    }
+
     update() {
-        if (
-            this.requestStatus === EnumRequestStatus.idle ||
-            this.requestStatus === EnumRequestStatus.returned
-        ) {
+        const request = () => {
+            if (
+                this.requestStatus === EnumRequestStatus.inProcess ||
+                this.longpoolingSwitchState === EnumLongpoolingSwitchState.off
+                // this.requestStatus === EnumRequestStatus.idle ||
+                // this.requestStatus === EnumRequestStatus.returned
+            ) {
+                return
+            }
+
             this.sendRequest()
         }
+
+        request()
     }
 
     constructor() {
+        this.requestStatus = EnumRequestStatus.idle
+        this.longpoolingSwitchState = EnumLongpoolingSwitchState.off
         this.onStatusChangedCallBack = () => {}
         this.baseUrl = 'http://127.0.0.1:3030'
-        this.requestStatus = EnumRequestStatus.idle
         this.data = 0
     }
 }

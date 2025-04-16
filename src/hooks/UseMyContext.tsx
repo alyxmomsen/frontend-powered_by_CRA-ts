@@ -1,14 +1,14 @@
 import { useContext } from 'react'
 import {
-    IMyContext,
+    TMyContext,
     MyBusinessLogicContext,
     MyContext,
 } from '../Business/context/MyBusinessLogicContext'
 
-export function UseMyContext(): IMyContext {
+export function UseMyContext(): TMyContext {
     const ctx = useContext(MyContext)
 
     if (ctx === undefined) throw new Error('no context')
 
-    return { app: ctx.app }
+    return { app: ctx.app, longpollingState: ctx.longpollingState }
 }
