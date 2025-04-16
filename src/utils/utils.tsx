@@ -3,10 +3,10 @@ import { EnumRequestStatus } from '../Business/App/App'
 export function decorder(state: EnumRequestStatus) {
     switch (state) {
         case EnumRequestStatus.standby:
-            return 'idle'
+            return 'standby'
             break
         case EnumRequestStatus.pending:
-            return 'inProcess'
+            return 'standby'
             break
         case EnumRequestStatus.returned:
             return 'returned'
