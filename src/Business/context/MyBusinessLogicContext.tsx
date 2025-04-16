@@ -18,7 +18,7 @@ export function MyBusinessLogicContext({
 }) {
     const [app] = useState(new MyBusinessLogicApp())
     const [state, setState] = useState<TInerfaceGlobalState>({
-        longpollingState: EnumRequestStatus.idle,
+        longpollingState: EnumRequestStatus.standby,
     })
 
     useEffect(() => {
@@ -30,9 +30,7 @@ export function MyBusinessLogicContext({
 
         const loop = () => {
             console.log('lllllooooppp')
-
             app.update()
-
             window.requestAnimationFrame(loop)
         }
 

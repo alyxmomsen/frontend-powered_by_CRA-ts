@@ -20,9 +20,9 @@ const MyDemoComponent = () => {
             </button>
             <div>
                 <div>
-                    {longpollingState === EnumRequestStatus.idle
+                    {longpollingState === EnumRequestStatus.standby
                         ? 'idle'
-                        : longpollingState === EnumRequestStatus.inProcess
+                        : longpollingState === EnumRequestStatus.pending
                           ? 'in process'
                           : longpollingState === EnumRequestStatus.returned
                             ? 'returned'

@@ -8,8 +8,8 @@ export enum EnumLongpoolingSwitchState {
 }
 
 export enum EnumRequestStatus {
-    idle,
-    inProcess,
+    standby,
+    pending,
     returned,
     error,
 }
@@ -44,7 +44,7 @@ export default class MyBusinessLogicApp {
         const endPoint = '/api/f/fb'
 
         try {
-            this.requestStatus = EnumRequestStatus.inProcess
+            this.requestStatus = EnumRequestStatus.pending
 
             const response = await fetch(this.baseUrl + endPoint, {
                 method: 'post',
@@ -78,7 +78,7 @@ export default class MyBusinessLogicApp {
         const endPoint = '/api/hook'
 
         try {
-            this.requestStatus = EnumRequestStatus.inProcess
+            this.requestStatus = EnumRequestStatus.pending
             // после каждого обновления статуса, вызыватся колбек
             this.onStatusChangedCallBack.forEach((elem, i) =>
                 elem(this.requestStatus)
@@ -125,7 +125,7 @@ export default class MyBusinessLogicApp {
     update() {
         const request = () => {
             if (
-                this.requestStatus === EnumRequestStatus.inProcess ||
+                this.requestStatus === EnumRequestStatus.pending ||
                 this.longpoolingSwitchState === EnumLongpoolingSwitchState.off
                 // this.requestStatus === EnumRequestStatus.idle ||
                 // this.requestStatus === EnumRequestStatus.returned
@@ -140,7 +140,7 @@ export default class MyBusinessLogicApp {
     }
 
     constructor() {
-        this.requestStatus = EnumRequestStatus.idle
+        this.requestStatus = EnumRequestStatus.standby
         this.longpoolingSwitchState = EnumLongpoolingSwitchState.off
         this.onStatusChangedCallBack = []
         this.baseUrl = 'http://127.0.0.1:3030'

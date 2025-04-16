@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import {
     TMyContext,
-    MyBusinessLogicContext,
     MyContext,
 } from '../Business/context/MyBusinessLogicContext'
 
