@@ -6,7 +6,7 @@ export function decorder(state: EnumRequestStatus) {
             return 'standby'
             break
         case EnumRequestStatus.pending:
-            return 'standby'
+            return 'pending'
             break
         case EnumRequestStatus.returned:
             return 'returned'
