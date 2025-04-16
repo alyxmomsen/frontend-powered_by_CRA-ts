@@ -12,8 +12,6 @@ root.render(
     <React.StrictMode>
         <MyBusinessLogicContext>
             <App />
-            {/* <InerfaceContextComponent>
-            </InerfaceContextComponent> */}
         </MyBusinessLogicContext>
     </React.StrictMode>
 )

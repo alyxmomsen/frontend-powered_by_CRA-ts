@@ -22,10 +22,11 @@ export function MyBusinessLogicContext({
     })
 
     useEffect(() => {
-
-        app.onStatusChanged((status:EnumRequestStatus) => setState({
-            longpollingState:status
-        }))
+        app.onStatusChanged((status: EnumRequestStatus) =>
+            setState({
+                longpollingState: status,
+            })
+        )
 
         const loop = () => {
             console.log('lllllooooppp')

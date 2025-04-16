@@ -3,13 +3,12 @@ import { UseMyContext } from '../hooks/UseMyContext'
 import { EnumRequestStatus } from '../Business/App/App'
 
 const MyDemoComponent = () => {
-    const { app , longpollingState } = UseMyContext()
+    const { app, longpollingState } = UseMyContext()
     // const { longpollingState } = UseInterfaceContext()
 
     return (
         <div>
             <h1>header 1</h1>
-            <div></div>
             <button
                 onClick={() => {
                     app.addTransactionAction({

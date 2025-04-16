@@ -32,10 +32,10 @@ export default class MyBusinessLogicApp {
     }
     // -----------
 
-    private onStatusChangedCallBack: (status: EnumRequestStatus) => void
+    private onStatusChangedCallBack: ((status: EnumRequestStatus) => void)[]
 
     public onStatusChanged(cb: (status: EnumRequestStatus) => void) {
-        this.onStatusChangedCallBack = cb
+        this.onStatusChangedCallBack.push(cb)
     }
 
     public async addTransactionAction(data: any) {
@@ -80,7 +80,9 @@ export default class MyBusinessLogicApp {
         try {
             this.requestStatus = EnumRequestStatus.inProcess
             // после каждого обновления статуса, вызыватся колбек
-            this.onStatusChangedCallBack(this.requestStatus)
+            this.onStatusChangedCallBack.forEach((elem, i) =>
+                elem(this.requestStatus)
+            )
 
             const response = await fetch(this.baseUrl + endPoint, {
                 method: 'post',
@@ -100,12 +102,16 @@ export default class MyBusinessLogicApp {
         } catch (error) {
             console.log({ error })
             this.requestStatus = EnumRequestStatus.error
-            this.onStatusChangedCallBack(this.requestStatus)
+            this.onStatusChangedCallBack.forEach((elem, i) =>
+                elem(this.requestStatus)
+            )
         }
 
         this.requestStatus = EnumRequestStatus.returned
         // после каждого обновления статуса, вызыватся колбек
-        this.onStatusChangedCallBack(this.requestStatus)
+        this.onStatusChangedCallBack.forEach((elem, i) =>
+            elem(this.requestStatus)
+        )
     }
 
     public startLongpooling() {
@@ -136,7 +142,7 @@ export default class MyBusinessLogicApp {
     constructor() {
         this.requestStatus = EnumRequestStatus.idle
         this.longpoolingSwitchState = EnumLongpoolingSwitchState.off
-        this.onStatusChangedCallBack = () => {}
+        this.onStatusChangedCallBack = []
         this.baseUrl = 'http://127.0.0.1:3030'
         this.data = 0
     }
