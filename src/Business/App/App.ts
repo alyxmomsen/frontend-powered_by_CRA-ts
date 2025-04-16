@@ -15,9 +15,7 @@ export type TRequestData<T> = {
 
 export default class MyBusinessLogicApp {
     private data: number
-
     private baseUrl: string
-
     private requestStatus: EnumRequestStatus
 
     //  test  method
@@ -25,6 +23,12 @@ export default class MyBusinessLogicApp {
         alert()
     }
     // -----------
+
+    private onStatusChangedCallBack: (status: EnumRequestStatus) => void
+
+    public onStatusChanged(cb: (status: EnumRequestStatus) => void) {
+        this.onStatusChangedCallBack = cb
+    }
 
     public async addTransactionAction(data: any) {
         console.log('action')
@@ -68,6 +72,8 @@ export default class MyBusinessLogicApp {
 
         try {
             this.requestStatus = EnumRequestStatus.inProcess
+            // после каждого обновления статуса, вызыватся колбек
+            this.onStatusChangedCallBack(this.requestStatus)
 
             const response = await fetch(this.baseUrl + endPoint, {
                 method: 'post',
@@ -89,6 +95,8 @@ export default class MyBusinessLogicApp {
         }
 
         this.requestStatus = EnumRequestStatus.returned
+        // после каждого обновления статуса, вызыватся колбек
+        this.onStatusChangedCallBack(this.requestStatus)
     }
 
     update() {
@@ -101,8 +109,11 @@ export default class MyBusinessLogicApp {
     }
 
     constructor() {
+        this.onStatusChangedCallBack = () => {}
         this.baseUrl = 'http://127.0.0.1:3030'
         this.requestStatus = EnumRequestStatus.idle
         this.data = 0
     }
 }
+
+export interface IAction {}

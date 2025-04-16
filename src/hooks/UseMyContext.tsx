@@ -3,7 +3,7 @@ import {
     IMyContext,
     MyBusinessLogicContext,
     MyContext,
-} from '../Business/context/MyContext'
+} from '../Business/context/MyBusinessLogicContext'
 
 export function UseMyContext(): IMyContext {
     const ctx = useContext(MyContext)

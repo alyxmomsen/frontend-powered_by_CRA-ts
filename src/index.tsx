@@ -1,23 +1,19 @@
-import React, {
-    createContext,
-    FC,
-    JSX,
-    useContext,
-    useEffect,
-    useState,
-} from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { MyBusinessLogicContext } from './Business/context/MyContext'
+import { MyBusinessLogicContext } from './Business/context/MyBusinessLogicContext'
+import { InerfaceContextComponent } from './Business/context/RendeContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
     <React.StrictMode>
         <MyBusinessLogicContext>
-            <App />
+            <InerfaceContextComponent>
+                <App />
+            </InerfaceContextComponent>
         </MyBusinessLogicContext>
     </React.StrictMode>
 )
