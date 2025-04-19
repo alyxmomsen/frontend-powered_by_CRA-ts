@@ -1,3 +1,5 @@
+import { WebSocketService } from '../services/WebSocketService'
+
 export type TResponseData<T> = {
     payload: T
 }
@@ -26,16 +28,32 @@ export default class MyBusinessLogicApp {
     private requestStatus: EnumRequestStatus
     private longpoolingSwitchState: EnumLongpoolingSwitchState
 
+    private websocketService: WebSocketService
+
     //  test  method
     public do() {
         alert()
     }
     // -----------
 
-    private onStatusChangedCallBack: ((status: EnumRequestStatus) => void)[]
+    private onStatusChangedCallBacks: ((status: EnumRequestStatus) => void)[]
+
+    // private onWebSocketMessageCallBacks: ((message: string) => void)[]
 
     public onStatusChanged(cb: (status: EnumRequestStatus) => void) {
-        this.onStatusChangedCallBack.push(cb)
+        this.onStatusChangedCallBacks.push(cb)
+    }
+
+    public onWebSocketMessageResponse(cb: (message: string) => void) {
+        this.websocketService.onMessage(cb)
+    }
+
+    public sendWebSocketMessage() {}
+
+    private webSocketApiInit() {
+        if (this.websocketService === null) return
+
+        this.websocketService.open()
     }
 
     public async addTransactionAction(data: any) {
@@ -71,7 +89,15 @@ export default class MyBusinessLogicApp {
         this.requestStatus = EnumRequestStatus.returned
     }
 
-    private async sendRequest() {
+    private async sendLongPollingRequest() {
+        if (
+            this.requestStatus === EnumRequestStatus.pending ||
+            this.longpoolingSwitchState === EnumLongpoolingSwitchState.off
+            // this.requestStatus === EnumRequestStatus.idle ||
+            // this.requestStatus === EnumRequestStatus.returned
+        )
+            return
+
         console.log('hook request')
         const contentType = 'application/json'
 
@@ -80,7 +106,7 @@ export default class MyBusinessLogicApp {
         try {
             this.requestStatus = EnumRequestStatus.pending
             // после каждого обновления статуса, вызыватся колбек
-            this.onStatusChangedCallBack.forEach((elem, i) =>
+            this.onStatusChangedCallBacks.forEach((elem, i) =>
                 elem(this.requestStatus)
             )
 
@@ -102,14 +128,14 @@ export default class MyBusinessLogicApp {
         } catch (error) {
             console.log({ error })
             this.requestStatus = EnumRequestStatus.error
-            this.onStatusChangedCallBack.forEach((elem, i) =>
+            this.onStatusChangedCallBacks.forEach((elem, i) =>
                 elem(this.requestStatus)
             )
         }
 
         this.requestStatus = EnumRequestStatus.returned
         // после каждого обновления статуса, вызыватся колбек
-        this.onStatusChangedCallBack.forEach((elem, i) =>
+        this.onStatusChangedCallBacks.forEach((elem, i) =>
             elem(this.requestStatus)
         )
     }
@@ -122,29 +148,30 @@ export default class MyBusinessLogicApp {
         this.longpoolingSwitchState = EnumLongpoolingSwitchState.off
     }
 
+    public initWebSocket() {
+        this.webSocketApiInit()
+    }
+
     update() {
-        const request = () => {
-            if (
-                this.requestStatus === EnumRequestStatus.pending ||
-                this.longpoolingSwitchState === EnumLongpoolingSwitchState.off
-                // this.requestStatus === EnumRequestStatus.idle ||
-                // this.requestStatus === EnumRequestStatus.returned
-            ) {
-                return
-            }
+        this.sendLongPollingRequest()
 
-            this.sendRequest()
-        }
-
-        request()
+        // this.webSocketApiInit()
     }
 
     constructor() {
         this.requestStatus = EnumRequestStatus.standby
         this.longpoolingSwitchState = EnumLongpoolingSwitchState.off
-        this.onStatusChangedCallBack = []
+        this.onStatusChangedCallBacks = []
         this.baseUrl = 'http://127.0.0.1:3030'
         this.data = 0
+
+        // websocket service instance
+
+        this.websocketService = WebSocketService.Instance()
+
+        console.log('wss', this.websocketService, WebSocketService.Instance())
+        // this.webSocketAPI = null ;
+        // this.onWebSocketMessageCallBacks = []
     }
 }
 

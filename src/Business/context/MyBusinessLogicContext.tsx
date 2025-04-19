@@ -29,7 +29,6 @@ export function MyBusinessLogicContext({
         )
 
         const loop = () => {
-            console.log('lllllooooppp')
             app.update()
             window.requestAnimationFrame(loop)
         }
